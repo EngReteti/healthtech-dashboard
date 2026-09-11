@@ -1,1 +1,60 @@
-<p>login works!</p>
+<!-- Full-height page, centered content, soft blue-teal gradient 
+     background - this is our first real application of the design 
+     direction we agreed on -->
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-teal-50 p-4">
+
+  <!-- The actual login card - white background, soft shadow, 
+       rounded corners give it that clean modern SaaS look -->
+  <div class="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
+
+    <!-- A simple medical cross icon using an inline SVG - no external 
+         icon library needed yet, this keeps things simple for now -->
+    <div class="flex justify-center mb-4">
+      <div class="bg-teal-100 rounded-full p-3">
+        <svg class="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+      </div>
+    </div>
+
+    <h1 class="text-2xl font-bold text-center text-gray-800 mb-1">
+      Hospital Inventory System
+    </h1>
+    <p class="text-center text-gray-500 mb-6">Sign in to continue</p>
+
+    <!-- (ngSubmit) is Angular's way of saying "run onSubmit() from 
+         login.ts when this form is submitted" -->
+    <form (ngSubmit)="onSubmit()">
+
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+        <!-- [(ngModel)] is TWO-WAY binding - whatever the user types 
+             here automatically updates the "email" variable in login.ts, 
+             and vice versa. This requires FormsModule, which we already 
+             imported in login.ts -->
+        <input type="email" [(ngModel)]="email" name="email" required
+               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+               placeholder="you@hospital.local" />
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+        <input type="password" [(ngModel)]="password" name="password" required
+               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+               placeholder="••••••••" />
+      </div>
+
+      <!-- Only shows up if errorMessage actually has text in it - 
+           *ngIf is Angular's conditional display syntax -->
+      @if (errorMessage) {
+        <p class="text-red-600 text-sm mb-4">{{ errorMessage }}</p>
+      }
+
+      <button type="submit"
+              class="w-full bg-teal-600 text-white py-2 rounded-lg font-semibold hover:bg-teal-700 transition-colors">
+        Sign In
+      </button>
+    </form>
+  </div>
+</div>
