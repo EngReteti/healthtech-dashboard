@@ -1,16 +1,15 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { routes } from './app.routes';
+import { authInterceptor } from './interceptors/auth.interceptor';
 
-// This is Angular's app-wide setup file - it registers services 
-// that should be available EVERYWHERE in the app, not just one component.
-// provideHttpClient() is what makes HttpClient (our tool for calling 
-// the backend API) usable in any component we build from here on
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideHttpClient()
+    // withInterceptors registers our interceptor to run on every
+    // request made through HttpClient, anywhere in the app
+    provideHttpClient(withInterceptors([authInterceptor]))
   ]
 };
