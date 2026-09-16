@@ -1,1 +1,22 @@
-<p>dashboard works!</p>
+<div class="min-h-screen bg-gray-50 p-6">
+  <h1 class="text-2xl font-bold text-gray-800 mb-4">Hospital Inventory Dashboard</h1>
+
+  @if (loading()) {
+    <p class="text-gray-500">Loading products...</p>
+  }
+
+  @if (errorMessage()) {
+    <p class="text-red-600 font-bold">{{ errorMessage() }}</p>
+  }
+
+  @if (!loading() && !errorMessage() && products().length > 0) {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      @for (product of products(); track product.id) {
+        <div class="bg-white rounded-xl shadow p-5 border border-gray-100">
+          <h2 class="font-semibold text-gray-800">{{ product.name }}</h2>
+          <p class="text-sm text-gray-500">SKU: {{ product.sku }}</p>
+        </div>
+      }
+    </div>
+  }
+</div>
