@@ -10,6 +10,7 @@ export interface Product {
   sku: string;
   category: string;
   unitPrice: number;
+  currency: string;
   reorderLevel: number;
   isControlledSubstance: boolean;
   supplier: { id: number; name: string };
