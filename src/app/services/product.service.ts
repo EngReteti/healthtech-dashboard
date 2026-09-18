@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-// This matches the shape of data our backend's Product entity sends back -
-// TypeScript uses this to catch mistakes early, e.g. if we typo a field name
 export interface Product {
   id: number;
   name: string;
@@ -16,8 +14,6 @@ export interface Product {
   supplier: { id: number; name: string };
 }
 
-// @Injectable means: "this class can be automatically provided anywhere
-// it's needed" - same dependency injection pattern as everything else
 @Injectable({
   providedIn: 'root'
 })
@@ -27,10 +23,14 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
-  // Observable<Product[]> means: "this will eventually deliver a list
-  // of products" - the actual delivery happens later, when something
-  // calls .subscribe() on it, same pattern as login.ts
   getAllProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(this.apiUrl);
+  }
+
+  // Fetches the real, calculated current stock for one product -
+  // returns a plain number, matching exactly what our backend
+  // endpoint sends back
+  getCurrentStock(productId: number): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/${productId}/stock`);
   }
 }

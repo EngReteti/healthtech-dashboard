@@ -10,12 +10,15 @@ import { CommonModule } from '@angular/common';
 })
 export class Dashboard implements OnInit {
 
-  // signal() creates a value that Angular actively tracks - when it 
-  // changes, the screen is GUARANTEED to update, unlike a plain 
-  // variable which may not trigger a refresh in newer Angular versions
   products = signal<Product[]>([]);
   loading = signal<boolean>(true);
   errorMessage = signal<string>('');
+
+  // A simple lookup: product ID -> its current stock number.
+  // We use a plain object here since it's just local, temporary data 
+  // used only for display, not something Angular needs to reactively 
+  // track field-by-field the way our main signals do
+  stockLevels = signal<{ [productId: number]: number }>({});
 
   constructor(private productService: ProductService) {}
 
@@ -24,6 +27,19 @@ export class Dashboard implements OnInit {
       next: (data) => {
         this.products.set(data);
         this.loading.set(false);
+
+        // For each product, separately fetch its real current stock 
+        // and add it to our stockLevels signal once it arrives
+        data.forEach((product) => {
+          this.productService.getCurrentStock(product.id).subscribe({
+            next: (stock) => {
+              this.stockLevels.update((current) => ({
+                ...current,
+                [product.id]: stock
+              }));
+            }
+          });
+        });
       },
       error: (err) => {
         this.loading.set(false);
