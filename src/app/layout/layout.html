@@ -1,0 +1,10 @@
+<div class="flex">
+  <app-sidebar></app-sidebar>
+
+  <!-- ml-64 pushes this content area to the right, exactly matching 
+       the sidebar's fixed width (w-64) - without this, content would 
+       sit UNDER the sidebar instead of beside it -->
+  <main class="flex-1 ml-64">
+    <router-outlet></router-outlet>
+  </main>
+</div>
