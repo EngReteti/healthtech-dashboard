@@ -1,10 +1,23 @@
-<div class="flex">
+<div class="min-h-screen bg-gray-50">
+
+  <header class="fixed top-0 left-0 right-0 h-16 bg-white border-b border-gray-200 flex items-center px-6 z-20">
+    <div class="bg-teal-100 rounded-full p-2 mr-3 flex-shrink-0">
+      <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2M5 21H3m16 0v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6" />
+      </svg>
+    </div>
+    <!-- Title and subtitle now stacked vertically together, as one 
+         unit, instead of sitting side by side awkwardly -->
+    <div class="leading-tight">
+      <h1 class="text-lg font-bold text-gray-800">Hospital Inventory System</h1>
+      <p class="text-xs text-gray-400">Medical Supply Management</p>
+    </div>
+  </header>
+
   <app-sidebar></app-sidebar>
 
-  <!-- ml-64 pushes this content area to the right, exactly matching 
-       the sidebar's fixed width (w-64) - without this, content would 
-       sit UNDER the sidebar instead of beside it -->
-  <main class="flex-1 ml-64">
+  <main class="ml-64 pt-16">
     <router-outlet></router-outlet>
   </main>
 </div>

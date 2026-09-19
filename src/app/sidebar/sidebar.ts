@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -7,12 +8,23 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css'
 })
-export class Sidebar {
+export class Sidebar implements OnInit {
 
-  constructor(private router: Router) {}
+  // Holds the real logged-in user's name and role, fetched fresh - 
+  // this is what actually lets someone SEE whether they're using 
+  // the Auditor or Storekeeper account, not just guess from memory
+  userName = signal<string>('');
+  userRole = signal<string>('');
 
-  getRole(): string {
-    return localStorage.getItem('role') || '';
+  constructor(private router: Router, private userService: UserService) {}
+
+  ngOnInit(): void {
+    this.userService.getCurrentUser().subscribe({
+      next: (user) => {
+        this.userName.set(user.name);
+        this.userRole.set(user.role);
+      }
+    });
   }
 
   logout(): void {

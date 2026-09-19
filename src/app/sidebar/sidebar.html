@@ -1,22 +1,9 @@
-<aside class="h-screen w-64 bg-white border-r border-gray-200 flex flex-col fixed left-0 top-0">
+<!-- top-16 (not top-0) starts the sidebar right below the new header. 
+     h-[calc(100dvh-4rem)] makes it exactly fill the remaining screen 
+     height below that header, accounting for mobile's dynamic viewport -->
+<aside class="w-64 bg-white border-r border-gray-200 flex flex-col fixed left-0 top-16 h-[calc(100dvh-4rem)] overflow-y-auto">
 
-  <!-- Logo / title area -->
-  <div class="flex items-center gap-2 px-6 py-5 border-b border-gray-100">
-    <div class="bg-teal-100 rounded-full p-2">
-      <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2M5 21H3m16 0v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6" />
-      </svg>
-    </div>
-    <span class="font-bold text-gray-800 leading-tight">Hospital<br>Inventory</span>
-  </div>
-
-  <!-- Navigation links -->
   <nav class="flex-1 px-3 py-4 space-y-1">
-
-    <!-- routerLinkActive adds the classes below ONLY when this link's 
-         path matches the current URL - this is the automatic 
-         "which tab am I on" highlighting -->
     <a routerLink="/dashboard" routerLinkActive="bg-teal-50 text-teal-700 font-semibold"
        class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 text-sm">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -36,13 +23,13 @@
     </a>
   </nav>
 
-  <!-- Bottom section: role badge and logout -->
-  <div class="px-4 py-4 border-t border-gray-100">
-    <div class="bg-gray-100 text-gray-600 text-xs px-3 py-1.5 rounded-full text-center mb-3">
-      {{ getRole() }}
+  <div class="px-4 py-4 border-t border-gray-100 flex-shrink-0">
+    <p class="text-sm font-medium text-gray-700 truncate">{{ userName() }}</p>
+    <div class="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full inline-block mt-1 mb-3">
+      {{ userRole() }}
     </div>
     <button (click)="logout()"
-            class="w-full text-red-600 hover:bg-red-50 text-sm font-medium py-2 rounded-lg">
+            class="w-full text-red-600 hover:bg-red-50 text-sm font-medium py-2 rounded-lg border border-red-100">
       Log Out
     </button>
   </div>
