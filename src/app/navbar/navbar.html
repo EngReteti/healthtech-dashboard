@@ -1,0 +1,24 @@
+<nav class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between shadow-sm">
+  <div class="flex items-center gap-2">
+    <div class="bg-teal-100 rounded-full p-2">
+      <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2M5 21H3m16 0v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6" />
+      </svg>
+    </div>
+    <span class="font-bold text-gray-800">Hospital Inventory</span>
+  </div>
+
+  <div class="flex items-center gap-6">
+    <a routerLink="/dashboard" class="text-gray-600 hover:text-teal-600 text-sm font-medium">Dashboard</a>
+
+    <span class="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full">
+      {{ getRole() }}
+    </span>
+
+    <button (click)="logout()"
+            class="text-red-600 hover:text-red-700 text-sm font-medium">
+      Log Out
+    </button>
+  </div>
+</nav>

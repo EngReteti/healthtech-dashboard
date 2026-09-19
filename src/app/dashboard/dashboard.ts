@@ -1,10 +1,11 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { ProductService, Product } from '../services/product.service';
 import { CommonModule } from '@angular/common';
+import { Navbar } from '../navbar/navbar';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule],
+  imports: [CommonModule, Navbar],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
