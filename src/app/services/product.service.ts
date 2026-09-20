@@ -14,6 +14,16 @@ export interface Product {
   supplier: { id: number; name: string };
 }
 
+export interface CreateProductRequest {
+  name: string;
+  sku: string;
+  category: string;
+  unitPrice: number;
+  reorderLevel: number;
+  isControlledSubstance: boolean;
+  supplier: { id: number };
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -27,10 +37,11 @@ export class ProductService {
     return this.http.get<Product[]>(this.apiUrl);
   }
 
-  // Fetches the real, calculated current stock for one product -
-  // returns a plain number, matching exactly what our backend
-  // endpoint sends back
   getCurrentStock(productId: number): Observable<number> {
     return this.http.get<number>(`${this.apiUrl}/${productId}/stock`);
+  }
+
+  createProduct(product: CreateProductRequest): Observable<Product> {
+    return this.http.post<Product>(this.apiUrl, product);
   }
 }

@@ -6,6 +6,7 @@ import { StockMovement } from './stock-movement/stock-movement';
 import { MovementHistory } from './movement-history/movement-history';
 import { Approvals } from './approvals/approvals';
 import { Suppliers } from './suppliers/suppliers';
+import { Products } from './products/products';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
@@ -17,7 +18,8 @@ export const routes: Routes = [
       { path: 'stock-movement', component: StockMovement },
       { path: 'movement-history', component: MovementHistory },
       { path: 'approvals', component: Approvals },
-      { path: 'suppliers', component: Suppliers }
+      { path: 'suppliers', component: Suppliers },
+      { path: 'products', component: Products }
     ]
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' }
