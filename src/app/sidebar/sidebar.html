@@ -27,9 +27,17 @@
       </svg>
       History
     </a>
+
+    <a routerLink="/approvals" routerLinkActive="bg-teal-50 text-teal-700 font-semibold"
+       class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 text-sm">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      Approvals
+    </a>
   </nav>
 
-  <!-- Bottom section now shows ONLY the role badge, no personal name -->
   <div class="px-4 py-4 border-t border-gray-100 flex-shrink-0">
     <div class="bg-gray-100 text-gray-600 text-xs px-3 py-1.5 rounded-full text-center mb-3">
       {{ userRole() }}

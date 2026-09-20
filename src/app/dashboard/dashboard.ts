@@ -1,6 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { ProductService, Product } from '../services/product.service';
 import { CommonModule } from '@angular/common';
+import { toFriendlyMessage } from '../utils/http-error.util';
 
 @Component({
   selector: 'app-dashboard',
@@ -36,7 +37,7 @@ export class Dashboard implements OnInit {
       },
       error: (err) => {
         this.loading.set(false);
-        this.errorMessage.set('Status: ' + err.status);
+        this.errorMessage.set(toFriendlyMessage(err));
       }
     });
   }

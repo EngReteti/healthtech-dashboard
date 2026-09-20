@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ProductService, Product } from '../services/product.service';
 import { UserService } from '../services/user.service';
 import { StockMovementService } from '../services/stock-movement.service';
+import { toFriendlyMessage } from '../utils/http-error.util';
 
 @Component({
   selector: 'app-stock-movement',
@@ -68,7 +69,7 @@ export class StockMovement implements OnInit {
       },
       error: (err) => {
         this.submitting.set(false);
-        this.errorMessage.set(err.error?.error || 'Something went wrong. Please try again.');
+        this.errorMessage.set(toFriendlyMessage(err));
       }
     });
   }

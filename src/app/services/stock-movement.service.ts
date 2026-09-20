@@ -10,9 +10,6 @@ export interface StockMovementRequest {
   performedBy: { id: number };
 }
 
-// Matches the FULL shape of what our backend actually returns for 
-// each movement - including the nested product and performedBy 
-// objects, since we now need to DISPLAY this data, not just send it
 export interface StockMovementRecord {
   id: number;
   type: string;
@@ -37,8 +34,21 @@ export class StockMovementService {
     return this.http.post(this.apiUrl, movement);
   }
 
-  // Fetches every movement ever recorded, for the History page
   getAllMovements(): Observable<StockMovementRecord[]> {
     return this.http.get<StockMovementRecord[]>(this.apiUrl);
+  }
+
+  // Fetches only movements waiting for approval - used by the 
+  // Approvals page
+  getPendingMovements(): Observable<StockMovementRecord[]> {
+    return this.http.get<StockMovementRecord[]>(`${this.apiUrl}/pending`);
+  }
+
+  approveMovement(id: number): Observable<StockMovementRecord> {
+    return this.http.post<StockMovementRecord>(`${this.apiUrl}/${id}/approve`, {});
+  }
+
+  rejectMovement(id: number): Observable<StockMovementRecord> {
+    return this.http.post<StockMovementRecord>(`${this.apiUrl}/${id}/reject`, {});
   }
 }
