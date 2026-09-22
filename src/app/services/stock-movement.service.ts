@@ -8,6 +8,9 @@ export interface StockMovementRequest {
   quantity: number;
   reason: string;
   performedBy: { id: number };
+  // Optional - only sent when the movement is a TRANSFER. Marked 
+  // with "?" since most movement types don't need a department at all
+  department?: { id: number };
 }
 
 export interface StockMovementRecord {
@@ -19,6 +22,7 @@ export interface StockMovementRecord {
   createdAt: string;
   product: { id: number; name: string; sku: string };
   performedBy: { id: number; name: string };
+  department?: { id: number; name: string };
 }
 
 @Injectable({
@@ -38,8 +42,6 @@ export class StockMovementService {
     return this.http.get<StockMovementRecord[]>(this.apiUrl);
   }
 
-  // Fetches only movements waiting for approval - used by the 
-  // Approvals page
   getPendingMovements(): Observable<StockMovementRecord[]> {
     return this.http.get<StockMovementRecord[]>(`${this.apiUrl}/pending`);
   }
