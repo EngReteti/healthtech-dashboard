@@ -7,6 +7,14 @@ export interface User {
   name: string;
   email: string;
   role: string;
+  active: boolean;
+}
+
+export interface CreateUserRequest {
+  name: string;
+  email: string;
+  passwordHash: string;
+  role: string;
 }
 
 @Injectable({
@@ -18,10 +26,23 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  // Asks the backend "who am I?" based on the token already attached 
-  // automatically by our interceptor - this is how the frontend learns 
-  // its own numeric user ID
   getCurrentUser(): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/me`);
+  }
+
+  getAllUsers(): Observable<User[]> {
+    return this.http.get<User[]>(this.apiUrl);
+  }
+
+  createUser(user: CreateUserRequest): Observable<User> {
+    return this.http.post<User>(this.apiUrl, user);
+  }
+
+  deactivateUser(id: number): Observable<User> {
+    return this.http.post<User>(`${this.apiUrl}/${id}/deactivate`, {});
+  }
+
+  reactivateUser(id: number): Observable<User> {
+    return this.http.post<User>(`${this.apiUrl}/${id}/reactivate`, {});
   }
 }

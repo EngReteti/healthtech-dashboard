@@ -8,6 +8,7 @@ import { Approvals } from './approvals/approvals';
 import { Suppliers } from './suppliers/suppliers';
 import { Products } from './products/products';
 import { Departments } from './departments/departments';
+import { Users } from './users/users';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
@@ -21,7 +22,8 @@ export const routes: Routes = [
       { path: 'approvals', component: Approvals },
       { path: 'suppliers', component: Suppliers },
       { path: 'products', component: Products },
-      { path: 'departments', component: Departments }
+      { path: 'departments', component: Departments },
+      { path: 'users', component: Users }
     ]
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' }
