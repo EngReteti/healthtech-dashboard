@@ -67,11 +67,16 @@
             <span class="text-teal-700 font-bold">{{ product.currency }} {{ product.unitPrice }}</span>
           </div>
           <div class="flex justify-between items-center mt-2 pt-2 border-t border-gray-100">
-            <span class="text-sm font-medium text-gray-700">
+            <span class="text-sm font-medium" [ngClass]="getStockColor(product)">
               Stock: {{ stockLevels()[product.id] ?? '...' }}
             </span>
             <span class="text-xs text-gray-400">Reorder at: {{ product.reorderLevel }}</span>
           </div>
+          @if (isLowStock(product)) {
+            <div class="mt-2 bg-red-50 text-red-700 text-xs px-2 py-1.5 rounded-lg text-center font-medium">
+              Low stock - reorder needed
+            </div>
+          }
         </div>
       }
     </div>
