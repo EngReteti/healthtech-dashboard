@@ -8,9 +8,8 @@ export interface StockMovementRequest {
   quantity: number;
   reason: string;
   performedBy: { id: number };
-  // Optional - only sent when the movement is a TRANSFER. Marked 
-  // with "?" since most movement types don't need a department at all
   department?: { id: number };
+  batch?: { id: number };
 }
 
 export interface StockMovementRecord {
@@ -23,6 +22,7 @@ export interface StockMovementRecord {
   product: { id: number; name: string; sku: string };
   performedBy: { id: number; name: string };
   department?: { id: number; name: string };
+  batch?: { id: number; batchNumber: string };
 }
 
 @Injectable({

@@ -12,7 +12,7 @@
                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
           <option [value]="null" disabled>Select a product</option>
           @for (product of products(); track product.id) {
-            <option [value]="product.id">{{ product.name }} ({{ product.sku }})</option>
+            <option [ngValue]="product.id">{{ product.name }} ({{ product.sku }})</option>
           }
         </select>
       </div>
@@ -27,9 +27,6 @@
         </select>
       </div>
 
-      <!-- Only appears when TRANSFER is selected - keeps the form 
-           clean for every other movement type, since a department 
-           destination only makes sense for a transfer -->
       @if (selectedType === 'TRANSFER') {
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700 mb-1">Destination Department</label>
@@ -40,6 +37,30 @@
               <option [value]="dept.id">{{ dept.name }} ({{ dept.locationCode }})</option>
             }
           </select>
+        </div>
+      }
+
+      <!-- Only appears for IN, and only once a product is selected - 
+           shows just the batches belonging to that specific product, 
+           thanks to the computed() filter in stock-movement.ts -->
+      @if (selectedType === 'IN' && selectedProductId) {
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            Batch <span class="text-gray-400 font-normal">(optional)</span>
+          </label>
+          @if (batchesForSelectedProduct().length === 0) {
+            <p class="text-xs text-gray-400 mb-1">
+              No batches recorded for this product yet - add one on the Batches page first if you want to link it.
+            </p>
+          } @else {
+            <select [(ngModel)]="selectedBatchId" name="batch"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
+              <option [value]="null">No specific batch</option>
+              @for (batch of batchesForSelectedProduct(); track batch.id) {
+                <option [value]="batch.id">{{ batch.batchNumber }} (expires {{ batch.expiryDate }})</option>
+              }
+            </select>
+          }
         </div>
       }
 

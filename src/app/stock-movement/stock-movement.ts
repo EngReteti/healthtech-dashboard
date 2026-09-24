@@ -1,9 +1,10 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ProductService, Product } from '../services/product.service';
 import { UserService } from '../services/user.service';
 import { DepartmentService, Department } from '../services/department.service';
+import { BatchService, Batch } from '../services/batch.service';
 import { StockMovementService } from '../services/stock-movement.service';
 import { toFriendlyMessage } from '../utils/http-error.util';
 
@@ -17,11 +18,13 @@ export class StockMovement implements OnInit {
 
   products = signal<Product[]>([]);
   departments = signal<Department[]>([]);
+  allBatches = signal<Batch[]>([]);
   movementTypes = ['IN', 'DISPENSED', 'TRANSFER', 'DAMAGE', 'EXPIRED', 'ADJUSTMENT'];
 
   selectedProductId: number | null = null;
   selectedType: string = 'IN';
   selectedDepartmentId: number | null = null;
+  selectedBatchId: number | null = null;
   quantity: number = 1;
   reason: string = '';
   currentUserId: number | null = null;
@@ -30,10 +33,20 @@ export class StockMovement implements OnInit {
   errorMessage = signal<string>('');
   submitting = signal<boolean>(false);
 
+  // computed() automatically recalculates whenever selectedProductId 
+  // or allBatches changes - this is what filters the batch dropdown 
+  // to only show batches belonging to the currently selected product
+  batchesForSelectedProduct = computed(() => {
+    const productId = this.selectedProductId;
+    if (!productId) return [];
+    return this.allBatches().filter(b => b.product.id === productId);
+  });
+
   constructor(
     private productService: ProductService,
     private userService: UserService,
     private departmentService: DepartmentService,
+    private batchService: BatchService,
     private stockMovementService: StockMovementService
   ) {}
 
@@ -44,6 +57,10 @@ export class StockMovement implements OnInit {
 
     this.departmentService.getAllDepartments().subscribe({
       next: (data) => this.departments.set(data)
+    });
+
+    this.batchService.getAllBatches().subscribe({
+      next: (data) => this.allBatches.set(data)
     });
 
     this.userService.getCurrentUser().subscribe({
@@ -60,16 +77,11 @@ export class StockMovement implements OnInit {
       return;
     }
 
-    // TRANSFER specifically requires a destination department - every 
-    // other movement type leaves this optional/unset
     if (this.selectedType === 'TRANSFER' && !this.selectedDepartmentId) {
       this.errorMessage.set('Please select a destination department for this transfer.');
       return;
     }
-   
-   // trim() removes leading/trailing spaces, so a reason of just 
-    // " " (a lone space) is correctly treated as empty too, not 
-    // accepted as if it were real text
+
     if (!this.reason || this.reason.trim().length === 0) {
       this.errorMessage.set('Please provide a reason for this movement.');
       return;
@@ -85,10 +97,15 @@ export class StockMovement implements OnInit {
       performedBy: { id: this.currentUserId }
     };
 
-    // Only attach a department when it's actually relevant - keeps 
-    // the request clean for every other movement type
     if (this.selectedType === 'TRANSFER' && this.selectedDepartmentId) {
       payload.department = { id: this.selectedDepartmentId };
+    }
+
+    // Batch is optional and only relevant for IN - not every delivery 
+    // needs to reference a pre-existing batch (e.g. equipment doesn't 
+    // track batches at all)
+    if (this.selectedType === 'IN' && this.selectedBatchId) {
+      payload.batch = { id: this.selectedBatchId };
     }
 
     this.stockMovementService.recordMovement(payload).subscribe({
@@ -98,6 +115,7 @@ export class StockMovement implements OnInit {
         this.quantity = 1;
         this.reason = '';
         this.selectedDepartmentId = null;
+        this.selectedBatchId = null;
       },
       error: (err) => {
         this.submitting.set(false);
