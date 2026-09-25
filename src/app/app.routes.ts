@@ -10,6 +10,7 @@ import { Products } from './products/products';
 import { Departments } from './departments/departments';
 import { Users } from './users/users';
 import { Batches } from './batches/batches';
+import { Anomalies } from './anomalies/anomalies';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
@@ -25,7 +26,8 @@ export const routes: Routes = [
       { path: 'products', component: Products },
       { path: 'departments', component: Departments },
       { path: 'users', component: Users },
-      { path: 'batches', component: Batches }
+      { path: 'batches', component: Batches },
+      { path: 'anomalies', component: Anomalies }
     ]
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' }

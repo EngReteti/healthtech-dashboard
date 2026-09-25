@@ -1,0 +1,52 @@
+<div class="min-h-screen bg-gray-50 p-6">
+
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-800">Flagged Movements</h1>
+      <p class="text-gray-500 text-sm">Statistically unusual activity worth a second look</p>
+    </div>
+    <div class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-sm font-medium">
+      {{ anomalies().length }} Flagged
+    </div>
+  </div>
+
+  <!-- Honest context up front, so this never reads as an accusation - 
+       it's advisory, not a verdict -->
+  <div class="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-6 text-sm text-blue-800">
+    These are statistically unusual movements, not confirmed mistakes or wrongdoing.
+    Each one includes the exact reasoning behind the flag, so you can judge for yourself.
+  </div>
+
+  @if (loading()) {
+    <p class="text-gray-500">Analyzing movement history...</p>
+  }
+
+  @if (errorMessage()) {
+    <p class="text-red-600 font-bold">{{ errorMessage() }}</p>
+  }
+
+  @if (!loading() && anomalies().length === 0) {
+    <div class="bg-white rounded-xl shadow p-8 text-center border border-gray-100">
+      <p class="text-gray-500">Nothing unusual detected in your movement history right now.</p>
+    </div>
+  }
+
+  @if (!loading() && anomalies().length > 0) {
+    <div class="space-y-3">
+      @for (anomaly of anomalies(); track anomaly.movement.id) {
+        <div class="bg-white rounded-xl shadow p-5 border border-orange-100 border-l-4 border-l-orange-400">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded-full font-medium">
+              {{ anomaly.movement.type }}
+            </span>
+            <h2 class="font-semibold text-gray-800">{{ anomaly.movement.product.name }}</h2>
+          </div>
+          <p class="text-sm text-orange-700 font-medium mb-2">{{ anomaly.reason }}</p>
+          <p class="text-sm text-gray-500">
+            Quantity: {{ anomaly.movement.quantity }} · By {{ anomaly.movement.performedBy.name }} · {{ anomaly.movement.reason }}
+          </p>
+        </div>
+      }
+    </div>
+  }
+</div>
