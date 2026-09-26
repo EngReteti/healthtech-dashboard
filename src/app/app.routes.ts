@@ -11,6 +11,7 @@ import { Departments } from './departments/departments';
 import { Users } from './users/users';
 import { Batches } from './batches/batches';
 import { Anomalies } from './anomalies/anomalies';
+import { Reconciliation } from './reconciliation/reconciliation';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
@@ -27,7 +28,8 @@ export const routes: Routes = [
       { path: 'departments', component: Departments },
       { path: 'users', component: Users },
       { path: 'batches', component: Batches },
-      { path: 'anomalies', component: Anomalies }
+      { path: 'anomalies', component: Anomalies },
+      { path: 'reconciliation', component: Reconciliation }
     ]
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' }

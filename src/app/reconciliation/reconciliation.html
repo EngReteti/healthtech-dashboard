@@ -1,0 +1,76 @@
+<div class="min-h-screen bg-gray-50 p-6 flex justify-center">
+  <div class="bg-white rounded-2xl shadow-lg p-8 w-full max-w-lg">
+
+    <h1 class="text-2xl font-bold text-gray-800 mb-1">Physical Stock Count</h1>
+    <p class="text-gray-500 mb-6">Compare what's actually on the shelf against the system's records</p>
+
+    @if (errorMessage()) {
+      <p class="text-red-600 text-sm mb-4 bg-red-50 p-3 rounded-lg">{{ errorMessage() }}</p>
+    }
+
+    <!-- Show the form only when there's no result yet - keeps the 
+         page focused on one thing at a time -->
+    @if (!result()) {
+      <form (ngSubmit)="onSubmit()">
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Product</label>
+          <select [(ngModel)]="selectedProductId" name="product" required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
+            <option [ngValue]="null" disabled>Select a product to count</option>
+            @for (product of products(); track product.id) {
+              <option [ngValue]="product.id">{{ product.name }} ({{ product.sku }})</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Counted Quantity</label>
+          <p class="text-xs text-gray-400 mb-2">Enter exactly what you physically counted on the shelf, not what you expect it to be.</p>
+          <input type="number" [(ngModel)]="countedQuantity" name="countedQuantity" min="0" required
+                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500" />
+        </div>
+
+        <button type="submit" [disabled]="submitting()"
+                class="w-full bg-teal-600 text-white py-2 rounded-lg font-semibold hover:bg-teal-700 transition-colors disabled:opacity-50">
+          {{ submitting() ? 'Checking...' : 'Submit Count' }}
+        </button>
+      </form>
+    }
+
+    <!-- Show the real result once we have one - a discrepancy or a 
+         clean match, both shown honestly -->
+    @if (result()) {
+      @if (!result()!.discrepancyFound) {
+        <div class="bg-green-50 border border-green-100 rounded-xl p-6 text-center">
+          <p class="text-green-700 font-semibold text-lg mb-1">Stock matches exactly</p>
+          <p class="text-sm text-green-600">
+            System expected {{ result()!.calculatedStock }}, you counted {{ result()!.countedQuantity }}. No adjustment needed.
+          </p>
+        </div>
+      } @else {
+        <div class="bg-yellow-50 border border-yellow-100 rounded-xl p-6">
+          <p class="text-yellow-800 font-semibold text-lg mb-2">Discrepancy found</p>
+          <div class="grid grid-cols-2 gap-3 text-sm mb-3">
+            <div class="bg-white rounded-lg p-3">
+              <p class="text-gray-400">System expected</p>
+              <p class="font-bold text-gray-800">{{ result()!.calculatedStock }}</p>
+            </div>
+            <div class="bg-white rounded-lg p-3">
+              <p class="text-gray-400">You counted</p>
+              <p class="font-bold text-gray-800">{{ result()!.countedQuantity }}</p>
+            </div>
+          </div>
+          <p class="text-sm text-yellow-700">
+            Variance: <span class="font-bold">{{ result()!.variance > 0 ? '+' : '' }}{{ result()!.variance }}</span>
+            - a pending adjustment has been created and sent for Auditor approval.
+          </p>
+        </div>
+      }
+
+      <button (click)="reset()"
+              class="w-full mt-4 bg-gray-100 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-200">
+        Count Another Product
+      </button>
+    }
+  </div>
+</div>
